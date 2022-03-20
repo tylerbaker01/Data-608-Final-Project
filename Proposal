@@ -1,0 +1,11 @@
+The proposal requires 4 pieces of information.
+1. What do I want to show?
+I want to show how education levels of countries play a vital role for everyday life of a country. Specifically, I would like to see if there is any coorelation
+to PISA scores and the wealth of a nation(GDP per capita), life expectancy, violence(intentional homicides), and innovation(amount of researches in Research and
+Developement per million people).
+2. Why is it relevant to a current policy, business, or justice issues?
+Well, if I can show that education levels do play a role in those areas which I listed, then it is vitally important that we take education more serious. This would be 
+evidence to support the increased funding of the Education Department.
+3. What technologies do I plan to use?
+I believe that a Shiny app with interactive plots will best help me explore and visualize my data.
+4. What data do I plan to use?
