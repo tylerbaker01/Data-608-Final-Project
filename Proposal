@@ -6,6 +6,19 @@ Developement per million people).
 2. Why is it relevant to a current policy, business, or justice issues?
 Well, if I can show that education levels do play a role in those areas which I listed, then it is vitally important that we take education more serious. This would be 
 evidence to support the increased funding of the Education Department.
+On the other side, if there is no coorelation then maybe education isn't as important as we assume it to be.
 3. What technologies do I plan to use?
 I believe that a Shiny app with interactive plots will best help me explore and visualize my data.
-4. What data do I plan to use?
+4. What data do I plan to use? 
+All of the data I intend to use will be open source.
+The links I used are as follows:
+For PISA data
+https://www.oecd.org/pisa/data/ where I then used the data explorer application they provide.
+For GDP per capita
+https://data.worldbank.org/indicator/NY.GDP.PCAP.CD?view=chart
+For life expectancy
+https://data.worldbank.org/indicator/SP.DYN.LE00.IN?view=chart
+For intentional homicides
+https://data.worldbank.org/indicator/VC.IHR.PSRC.P5?view=chart
+For amount of researchers in R&D
+https://data.worldbank.org/indicator/SP.POP.SCIE.RD.P6?view=chart
