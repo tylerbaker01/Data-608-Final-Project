@@ -1,0 +1,115 @@
+---
+title: "Tidying the Data"
+author: "Tyler Baker"
+date: "5/15/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(zoo)
+```
+
+# load data
+
+```{r}
+pisa_raw <- read.csv("https://raw.githubusercontent.com/tylerbaker01/Data-608-Final-Project/main/PISA_scores.csv")
+gdp_raw <- read.csv("https://raw.githubusercontent.com/tylerbaker01/Data-608-Final-Project/main/worldGDP.csv")
+lifeexp_raw <- read.csv("https://raw.githubusercontent.com/tylerbaker01/Data-608-Final-Project/main/LifeExpectancy.csv")
+homicide_raw <- read.csv("https://raw.githubusercontent.com/tylerbaker01/Data-608-Final-Project/main/HomicdeRate.csv")
+```
+
+Since the pisa scores are only given every three years we will limit the data on the others to only the years 2006, 2009, 2012, 2015, 2018.
+```{r}
+gdp_raw <- subset (gdp_raw, select= c("Country.Name", "X2006", "X2009", "X2012", "X2015", "X2018"))
+homicide_raw <- subset(homicide_raw, select=c("Country.Name", "X2006", "X2009", "X2012", "X2015", "X2018"))
+lifeexp_raw <- subset(lifeexp_raw, select=c("Country.Name", "X2006", "X2009", "X2012", "X2015", "X2018"))
+```
+
+Change the column names
+```{r}
+colnames(gdp_raw) <- c("Country", "2006", "2009", "2012", "2015", "2018")
+colnames(homicide_raw) <- c("Country", "2006", "2009", "2012", "2015", "2018")
+colnames(lifeexp_raw) <- c("Country", "2006", "2009", "2012", "2015", "2018")
+```
+
+Handeling NAs
+```{r}
+colSums(is.na(gdp_raw))
+colSums(is.na(homicide_raw))
+colSums(is.na(lifeexp_raw))
+```
+
+```{r}
+gdp <- na.omit(gdp_raw)
+homicide <- na.omit(homicide_raw)
+lifeexp <- na.omit(lifeexp_raw)
+```
+
+```{r}
+str(gdp)
+str(homicide)
+str(lifeexp)
+str(pisa_raw)
+```
+```{r}
+colnames(pisa_raw)<- c("year", "country", "reading", "reading se", "math", "math se", "science", "science se")
+pisa <- pisa_raw[c("year", "country", "reading", "math", "science")]
+```
+
+```{r}
+pisa$year <- as.character(pisa$year)
+pisa$country <- as.character(pisa$country)
+pisa$reading <- as.numeric(pisa$reading)
+pisa$math <- as.numeric(pisa$math)
+pisa$science <- as.numeric(pisa$science)
+```
+There are two NAs in reading scores. I will just replace these with zeros.
+```{r}
+pisa[is.na(pisa)]=0
+```
+
+# Pivot longer
+```{r}
+homicide<- homicide %>%
+  pivot_longer(!Country, names_to = "year", values_to = "homicide_rate")
+gdp <- gdp %>%
+  pivot_longer(!Country, names_to = "year", values_to = "gdp")
+lifeexp<- lifeexp %>%
+  pivot_longer(!Country, names_to = "year", values_to = "life_expectancy")
+```
+
+# Finalizing Data Frames
+```{r pisa_vs_gdp}
+pisa_vs_gdp <- pisa
+
+pisa_vs_gdp$gdp <- gdp$gdp[match(pisa_vs_gdp$country,gdp$Country)]
+
+pisa_vs_gdp <- na.omit(pisa_vs_gdp)
+```
+
+```{r pisa_vs_homicide}
+pisa_vs_homicide <- pisa
+
+pisa_vs_homicide$homicide_rate <- homicide$homicide_rate[match(pisa_vs_homicide$country,homicide$Country)]
+
+pisa_vs_homicide<- na.omit(pisa_vs_homicide)
+```
+
+```{r}
+pisa_vs_lifeexp <- pisa
+
+pisa_vs_lifeexp$life_expectancy <- lifeexp$life_expectancy[match(pisa_vs_lifeexp$country,lifeexp$Country)]
+
+pisa_vs_lifeexp<-na.omit(pisa_vs_lifeexp)
+```
+
+# Exporting as CSVs
+```{r}
+write.csv(pisa_vs_gdp, "C:\\Users\\tyler\\Downloads\\DATA 608\\pisa_vs_gdp.csv")
+
+write.csv(pisa_vs_homicide, "C:\\Users\\tyler\\Downloads\\DATA 608\\pisa_vs_homicide.csv")
+
+write.csv(pisa_vs_lifeexp, "C:\\Users\\tyler\\Downloads\\DATA 608\\pisa_vs_lifeexp.csv")
+```
