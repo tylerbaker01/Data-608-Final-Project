@@ -1,0 +1,131 @@
+---
+title: "Data Tidy 608 Final"
+author: "Tyler Baker"
+date: "5/16/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+# load data
+
+```{r}
+pisa_raw <- read.csv("https://raw.githubusercontent.com/tylerbaker01/Data-608-Final-Project/main/PISA_scores.csv")
+gdp_raw <- read.csv("https://raw.githubusercontent.com/tylerbaker01/Data-608-Final-Project/main/worldGDP.csv")
+lifeexp_raw <- read.csv("https://raw.githubusercontent.com/tylerbaker01/Data-608-Final-Project/main/LifeExpectancy.csv")
+homicide_raw <- read.csv("https://raw.githubusercontent.com/tylerbaker01/Data-608-Final-Project/main/HomicdeRate.csv")
+```
+
+Since the pisa scores are only given every three years we will limit the data on the others to only the years 2006, 2009, 2012, 2015, 2018.
+```{r}
+gdp_raw <- subset (gdp_raw, select= c("Country.Name", "X2006", "X2009", "X2012", "X2015", "X2018"))
+homicide_raw <- subset(homicide_raw, select=c("Country.Name", "X2006", "X2009", "X2012", "X2015", "X2018"))
+lifeexp_raw <- subset(lifeexp_raw, select=c("Country.Name", "X2006", "X2009", "X2012", "X2015", "X2018"))
+```
+
+```{r}
+colnames(gdp_raw) <- c("country", "2006", "2009", "2012", "2015", "2018")
+colnames(homicide_raw) <- c("country", "2006", "2009", "2012", "2015", "2018")
+colnames(lifeexp_raw) <- c("country", "2006", "2009", "2012", "2015", "2018")
+```
+
+Handeling NAs
+```{r}
+colSums(is.na(gdp_raw))
+colSums(is.na(homicide_raw))
+colSums(is.na(lifeexp_raw))
+```
+
+
+```{r}
+gdp <- na.omit(gdp_raw)
+homicide <- na.omit(homicide_raw)
+lifeexp <- na.omit(lifeexp_raw)
+```
+
+```{r}
+colnames(pisa_raw)<- c("year", "country", "reading", "reading se", "math", "math se", "science", "science se")
+pisa <- pisa_raw[c("year", "country", "reading", "math", "science")]
+```
+
+There are two NAs in reading scores. I will just replace these with zeros.
+```{r}
+pisa[is.na(pisa)]=0
+```
+
+Now I need to add gdp, homicide rate, and life expectancy to pisa.
+
+First I need to filter pisa by year.
+Second, I need to add a column for gdp, homicide rate, and life expectancy for country appear in both data sets.
+
+Then I will be able to row bind the new datasets into one dataset.
+
+```{r}
+pisa_2018 <- pisa %>%
+  filter(year==2018)
+pisa_2015 <- pisa %>%
+  filter(year==2015)
+pisa_2012 <- pisa%>%
+  filter(year==2012)
+pisa_2009 <- pisa%>%
+  filter(year==2009)
+pisa_2006 <- pisa%>%
+  filter(year==2006)
+```
+
+```{r}
+pisa_2006$gdp <- gdp$`2006`[match(pisa_2006$country,gdp$country)]
+pisa_2006$`life expectancy` <- lifeexp$`2006`[match(pisa_2006$country,lifeexp$country)]
+pisa_2006$`homicide rate` <- homicide$`2006`[match(pisa_2006$country,homicide$country)]
+pisa_2006 <- na.omit(pisa_2006)
+avg_2006 <- c(2006, "International Average", mean(pisa_2006$reading), mean(pisa_2006$math), mean(pisa_2006$science), mean(pisa_2006$gdp), mean(pisa_2006$`life expectancy`), mean(pisa_2006$`homicide rate`))
+pisa_2006<- rbind(pisa_2006,avg_2006)
+
+pisa_2009$gdp <- gdp$`2009`[match(pisa_2009$country,gdp$country)]
+pisa_2009$`life expectancy` <- lifeexp$`2009`[match(pisa_2009$country,lifeexp$country)]
+pisa_2009$`homicide rate` <- homicide$`2009`[match(pisa_2009$country,homicide$country)]
+pisa_2009 <- na.omit(pisa_2009)
+avg_2009 <- c(2009, "International Average", mean(pisa_2009$reading), mean(pisa_2009$math), mean(pisa_2009$science), mean(pisa_2009$gdp), mean(pisa_2009$`life expectancy`), mean(pisa_2009$`homicide rate`))
+pisa_2009<- rbind(pisa_2009,avg_2009)
+
+pisa_2012$gdp <- gdp$`2012`[match(pisa_2012$country,gdp$country)]
+pisa_2012$`life expectancy` <- lifeexp$`2012`[match(pisa_2012$country,lifeexp$country)]
+pisa_2012$`homicide rate` <- homicide$`2012`[match(pisa_2012$country,homicide$country)]
+pisa_2012 <- na.omit(pisa_2012)
+avg_2012 <- c(2012, "International Average", mean(pisa_2012$reading), mean(pisa_2012$math), mean(pisa_2012$science), mean(pisa_2012$gdp), mean(pisa_2012$`life expectancy`), mean(pisa_2012$`homicide rate`))
+pisa_2012<- rbind(pisa_2012,avg_2012)
+
+pisa_2015$gdp <- gdp$`2015`[match(pisa_2015$country,gdp$country)]
+pisa_2015$`life expectancy` <- lifeexp$`2015`[match(pisa_2015$country,lifeexp$country)]
+pisa_2015$`homicide rate` <- homicide$`2015`[match(pisa_2015$country,homicide$country)]
+pisa_2015 <- na.omit(pisa_2015)
+avg_2015 <- c(2015, "International Average", mean(pisa_2015$reading), mean(pisa_2015$math), mean(pisa_2015$science), mean(pisa_2015$gdp), mean(pisa_2015$`life expectancy`), mean(pisa_2015$`homicide rate`))
+pisa_2015<- rbind(pisa_2015,avg_2015)
+
+pisa_2018$gdp <- gdp$`2018`[match(pisa_2018$country,gdp$country)]
+pisa_2018$`life expectancy` <- lifeexp$`2018`[match(pisa_2018$country,lifeexp$country)]
+pisa_2018$`homicide rate` <- homicide$`2018`[match(pisa_2018$country,homicide$country)]
+pisa_2018 <- na.omit(pisa_2018)
+avg_2018 <- c(2018, "International Average", mean(pisa_2018$reading), mean(pisa_2018$math), mean(pisa_2018$science), mean(pisa_2018$gdp), mean(pisa_2018$`life expectancy`), mean(pisa_2018$`homicide rate`))
+pisa_2018<- rbind(pisa_2018,avg_2018)
+```
+
+```{r}
+pisa <- rbind(pisa_2006,pisa_2009,pisa_2012,pisa_2015,pisa_2018)
+```
+
+```{r}
+pisa<- na.omit(pisa)
+
+pisa<- pisa[order(pisa$country, pisa$year),]
+
+pisa<- pisa[c(2,1,3,4,5,6,7,8)]
+```
+
+```{r}
+write.csv(pisa, "C:\\Users\\tyler\\Downloads\\DATA 608\\pisa.csv")
+```
