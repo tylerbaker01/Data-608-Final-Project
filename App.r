@@ -15,27 +15,27 @@ ui <- fluidPage(
   
   tabsetPanel(
     tabPanel("Main",
-             titlePanel("Does Education Effect a Countries Success?"),
+             titlePanel("Does Education Effect a Country's Success?"),
              br(),
              p("Tyler Baker"),
              br(),
-             p("I have spent many years of my life as a tutor. I desperately want to feel like I am making the world
+             p("I have spent many years of my life as a tutor. I feel like I am making the world
                a better place. I have always been a firm believer that most of the world's problems stim from a degree of ignorance.
-               By teaching, or tutoring students, I believed that I was making the world a safer, richer, and more enjoyable place.
-               I decided to see if I was right in my belief."),
+               By teaching, or tutoring students, I believe that I am making the world a safer, richer, and more enjoyable place.
+               I decided to see if my belief was correct. As a bonus question I wanted to see if a specific subject had a greater impact."),
              br(),
-             p("I used data from PISA, and WorldBank. PISA is an international testing company that will test 15 year olds every 3 years.
-               While not every country contributes, it does provide a lot of information still. Specifically, PISA tests for math, science,
-               and reading. The WorldBank is a data collection company that gathers tons of data on countries. Specifically, I wanted to see
+             p("I used data from PISA, and WorldBank. PISA is an international testing company that conducts subject based tests on 15 year olds every 3 years.
+               While not every country contributes, it still provides a lot of useful information. Specifically, PISA tests for math, science,
+               and reading. The WorldBank is a data collection company that gathers data about countries. Specifically, I wanted to see
                if education played an impact on GDP, life expectancy, and homicide rate. I figured that by looking at these I would be able to
                say that education makes a country worth more money, education makes it so a country can provide its citizens better health care, and 
                that education makes a country's citizens happier(or at least better copers)."),
              br(),
              p("In the end, my data analyst has not definitively proven myself correct. However, it shows that their might be some truth to my belief.
                When looking at countries that scored higher than the national average, it seems they are more likely to have a higher GDP, and life expectancy, while having a lower
-               homicide rate."),
+               homicide rate. As for my bonus question, it appears that the subject wasn't as important. What was important was that the students did well in all three subjects."),
              br(),
-             p('A few things to note. PISA has not been established very long. The first year of their international testing that could be collected was from 2006.
+             p('A few things to note. PISA has not been established very long. The first year of their international testing that could be collected was from 2006, meaning that there is at most only 5 tests scores to compare for each country. 
                In the future, as long as PISA stays around, we will have more data which we can use to look at how countries changed over time. I also am sure there will be 
                a few out there that say, "This does not show that education makes the difference. This simply shows that money has an impact on education, life expectancy, and homicide rate."
                To those few, you might be correct. The best way we will know for certain is when we have more data in the future. If we are able to study the rise and fall of nations, then we will be able to state which impacts the other.')),
